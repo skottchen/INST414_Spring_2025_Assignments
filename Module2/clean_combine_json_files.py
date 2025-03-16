@@ -4,7 +4,7 @@ def process_files(x, y):
     collaborations = []
     BEYONCE_MISSPELLED = "Beyonc\u00e9"
     for _ in range(0, 7):
-        with open(f"artists_{x}_to_{y}.json", "r") as file:
+        with open(f"./Spotify_API_data/artists_{x}_to_{y}.json", "r") as file:
             data = json.load(file)
             for item in data:
                 if item["artist_name"] == BEYONCE_MISSPELLED:
