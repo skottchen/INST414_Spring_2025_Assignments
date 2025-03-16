@@ -64,9 +64,11 @@ for artist, (x, y) in pos.items():
 # Add title
 plt.title(
     "Collaborations Between Spotify Artists in Top 50 Global 2024 Playlist", fontsize=14)
-plt.show()
 
-# get degree centrality (dict)
+plt.savefig("./Outputs/spotify_artists_colab_graph.png")
+
+# calculate degree centrality (dictionary with artists' names as keys and values as 
+# the fraction of nodes each artist/node is connected to)
 degree_centrality = nx.degree_centrality(G)
 combined_dict = {}
 for key in collaboration_counts:
@@ -83,10 +85,8 @@ df = pd.DataFrame.from_dict(combined_dict, orient='index')
 df.index.name = "Artist_Name"  # Set index name instead of renaming columns
 
 # Sort by "Number of Collaborations" in descending order
-df_sorted = df.sort_values(by="Number_of_Track_Collaborations", ascending=False)
+df_sorted = df.sort_values(by="Degree_Centrality", ascending=False)
 
 # Write results to CSV with the correct format
-df_sorted.to_csv('artists_sorted_by_collaborations.csv',
+df_sorted.to_csv('./Outputs/artists_sorted_by_degree_centrality.csv',
                  index=True, index_label="Artist_Name")
-
-print("Script finished.")
