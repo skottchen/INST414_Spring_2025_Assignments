@@ -1,5 +1,6 @@
 import json
 
+# combine the API data files into 1 json file
 def process_files(x, y):
     collaborations = []
     BEYONCE_MISSPELLED = "Beyonc\u00e9"
