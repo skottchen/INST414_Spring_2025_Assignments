@@ -6,7 +6,7 @@ from datetime import datetime
 
 def get_top_artists(token, playlist_id):
     """
-    returns a dictionary of the top artists' names and Spotify ids on the Top 50 Global 2024 Playlist
+    returns a dictionary of the top artists' names and Spotify ids on the c
     """
     top_artists = {}
     query_url = f"https://api.spotify.com/v1/playlists/{playlist_id}?market=US&fields=tracks.items%28track%28artists%28id%2C+name%29"
