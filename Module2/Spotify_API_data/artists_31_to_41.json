@@ -96,5 +96,13 @@
       "Peso Pluma": 1,
       "Oscar Maydon": 1
     }
+  },
+  {
+    "artist_id": "1wRPtKGflJrBx9BmLsSwlU",
+    "artist_name": "Pritam",
+    "artist_collaborations": {
+      "Arijit Singh": 27,
+      "Amitabh Bhattacharya": 12
+    }
   }
 ]

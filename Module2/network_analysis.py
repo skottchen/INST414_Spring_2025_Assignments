@@ -4,10 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import matplotlib.colors as mcolors
 import matplotlib.patheffects as path_effects
-from collections import OrderedDict
 import pandas as pd
+from collections import OrderedDict
 # Load the data
-with open("artist_collaborations_raw_data.json", "r") as file:
+with open("cleaned_artists_data.json", "r") as file:
     data = json.load(file)
 
 # Create a graph
@@ -64,20 +64,14 @@ for artist, (x, y) in pos.items():
 # Add title
 plt.title(
     "Collaborations Between Spotify Artists in Top 50 Global 2024 Playlist", fontsize=14)
-# plt.show()
+plt.show()
 
-# get dictionary of degree centrality
+# get degree centrality (dict)
 degree_centrality = nx.degree_centrality(G)
-
-# iterate through graph and create dictionary of each node with degree (number of nodes)
-node_degrees = {}
-for node, degree in G.degree():
-    node_degrees[node] = degree
-
 combined_dict = {}
-for key in node_degrees:
+for key in collaboration_counts:
     combined_dict[key] = {
-        "Number_of_Track_Collaborations": node_degrees.get(key, 0),
+        "Number_of_Track_Collaborations": collaboration_counts.get(key, 0),
         # Handle missing keys
         "Degree_Centrality": degree_centrality.get(key, 0)
     }
@@ -94,3 +88,5 @@ df_sorted = df.sort_values(by="Number_of_Track_Collaborations", ascending=False)
 # Write results to CSV with the correct format
 df_sorted.to_csv('artists_sorted_by_collaborations.csv',
                  index=True, index_label="Artist_Name")
+
+print("Script finished.")

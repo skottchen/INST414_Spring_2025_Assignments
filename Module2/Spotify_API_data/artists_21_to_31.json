@@ -97,5 +97,16 @@
     "artist_collaborations": {
       "Post Malone": 1
     }
+  },
+  {
+    "artist_id": "7Gi6gjaWy3DxyilpF1a8Is",
+    "artist_name": "Junior H",
+    "artist_collaborations": {
+      "Oscar Maydon": 1,
+      "Fuerza Regida": 1,
+      "Myke Towers": 1,
+      "Natanael Cano": 15,
+      "Peso Pluma": 2
+    }
   }
 ]

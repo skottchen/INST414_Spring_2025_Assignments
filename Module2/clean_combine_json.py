@@ -1,6 +1,6 @@
 import json
 
-# combine the API data files into 1 json file
+# combine the Spotify API data files into 1 json file
 def process_files(x, y):
     collaborations = []
     BEYONCE_MISSPELLED = "Beyonc\u00e9"
@@ -19,8 +19,12 @@ def process_files(x, y):
                                 BEYONCE_MISSPELLED)
                     collaborations.append(item)
 
-            x += 10
-            if y == 60:
+            if x == 0:
+                x += 11
+            else:
+                x += 10
+                
+            if y == 61:
                 y += 8
             else:
                 y += 10
@@ -29,10 +33,10 @@ def process_files(x, y):
 
 
 def main():
-    x, y = 1, 10
+    x, y = 0, 11
     collaborations = process_files(x, y)
-
-    with open("artist_collaborations.json", "w") as file:
+    # 61 artists in collaborations
+    with open("cleaned_artists_data.json", "w") as file:
         json.dump(collaborations, file, indent=2)
 
 

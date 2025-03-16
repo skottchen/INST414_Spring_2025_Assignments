@@ -93,5 +93,18 @@
       "Travis Scott": 1,
       "The Weeknd": 1
     }
+  },
+  {
+    "artist_id": "0VRj0yCOv2FXJNP47XQnx5",
+    "artist_name": "Quavo",
+    "artist_collaborations": {
+      "Lana Del Rey": 3,
+      "Future": 2,
+      "21 Savage": 1,
+      "Drake": 1,
+      "Travis Scott": 14,
+      "Peso Pluma": 1,
+      "Ty Dolla $ign": 1
+    }
   }
 ]

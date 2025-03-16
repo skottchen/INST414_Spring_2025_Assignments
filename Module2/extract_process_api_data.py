@@ -67,9 +67,12 @@ def main():
     token = get_token()
     collaboration_data = []
     top_artists = get_top_artists(token, "2zgxFGz72M84blKIBj08Sm")
+    # setting x and y prevents getting rate limited by API before all data is collected
+    x = 61  # inclusive index 
+    y = 69  # non_inclusive index
     with open("top_artists.json", "w") as file:
         json.dump(top_artists, file, indent=2)
-    for artist_id in list(top_artists.keys())[0:11]:
+    for artist_id in list(top_artists.keys())[x:y]:
         artist_colab_dict = {}
         artist_colab_dict["artist_id"] = artist_id
         artist_colab_dict["artist_name"] = top_artists.get(artist_id)
@@ -124,7 +127,7 @@ def main():
         collaboration_data.append(artist_colab_dict) # appends a new entry to the list
         
         # generate data for 10 artists at a time to avoid being rate limited by Spotify API
-        with open("collaborations_1_to_10.json", "w") as file: 
+        with open(f"./Spotify_API_data/artists_{x}_to_{y}.json", "w") as file: 
             json.dump(collaboration_data, file, indent=2)
  
     print("Finished writing data to file.")
