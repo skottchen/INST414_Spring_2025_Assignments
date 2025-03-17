@@ -73,9 +73,8 @@ degree_centrality = nx.degree_centrality(G)
 combined_dict = {}
 for key in collaboration_counts:
     combined_dict[key] = {
-        "Number_of_Track_Collaborations": collaboration_counts.get(key, 0),
-        # Handle missing keys
-        "Degree_Centrality": degree_centrality.get(key, 0)
+        "Degree_Centrality": degree_centrality.get(key, 0),
+        "Number_of_Track_Collaborations": collaboration_counts.get(key, 0)
     }
 
 # Convert to DataFrame
