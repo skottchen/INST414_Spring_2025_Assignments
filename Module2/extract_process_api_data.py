@@ -1,12 +1,15 @@
 from auth import get_token, get_auth_header
 from requests import get
 import json
+import os
+from dotenv import load_dotenv
 from collections import OrderedDict
 from datetime import datetime
 
 def get_top_artists(token, playlist_id):
     """
-    returns a dictionary of the top artists' names and Spotify ids on the c
+    returns a dictionary containing the Spotify ids (keys)
+    and artists' names (values) from the Top Artists of 2024 Global playlist
     """
     top_artists = {}
     query_url = f"https://api.spotify.com/v1/playlists/{playlist_id}?market=US&fields=tracks.items%28track%28artists%28id%2C+name%29"
@@ -24,7 +27,8 @@ def get_top_artists(token, playlist_id):
 
 def get_artist_albums(token, artist_id):
     """
-    returns a sorted dictionary with keys being album_id and values being album name
+    returns a sorted dictionary with keys being album_id and values being album names 
+    (In other words, albums by the artist which artist_id belongs to)
     """
     artist_albums = {}
     query_url = f"https://api.spotify.com/v1/artists/{artist_id}/albums?market=US"
@@ -65,8 +69,9 @@ def get_artist_collaborations(token, album_id, album_artist, artist_collaboratio
 
 def main():
     token = get_token()
+    playlist_id = os.getenv("PLAYLIST_ID")
     collaboration_data = []
-    top_artists = get_top_artists(token, "2zgxFGz72M84blKIBj08Sm")
+    top_artists = get_top_artists(token, playlist_id)
     # setting x and y prevents getting rate limited by API before all data is collected
     x = 61  # inclusive index 
     y = 69  # non_inclusive index
@@ -130,7 +135,7 @@ def main():
         with open(f"./Spotify_API_data/artists_{x}_to_{y}.json", "w") as file: 
             json.dump(collaboration_data, file, indent=2)
  
-    print("Finished writing data to file.")
+    print("Finished writing data to files.")
 
 
 if __name__ == "__main__":

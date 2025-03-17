@@ -34,7 +34,7 @@ for artist in data:
         G.add_edge(artist_name, collaborator)
 
 # Assign node sizes based on total collaborations
-node_sizes = [collaboration_counts[n] * 30 for n in G.nodes()]
+# node_sizes = [collaboration_counts[n] * 30 for n in G.nodes()]
 
 # Use a colormap for distinct colors
 cmap = cm.get_cmap("tab20")  # 20 distinct colors
@@ -47,7 +47,7 @@ pos = nx.spring_layout(G, k=0.5, seed=42)  # Increase `k` to spread nodes apart
 
 # Draw nodes (colored based on artist names)
 node_colors = [colors[n] for n in G.nodes()]
-nx.draw_networkx_nodes(G, pos, node_size=node_sizes,
+nx.draw_networkx_nodes(G, pos, #node_size=node_sizes,
                        node_color=node_colors, edgecolors="black", alpha=0.85)
 
 # Draw edges
@@ -63,7 +63,7 @@ for artist, (x, y) in pos.items():
 
 # Add title
 plt.title(
-    "Collaborations Between Spotify Artists in Top 50 Global 2024 Playlist", fontsize=14)
+    "Collaborations Between Artists in Spotify's Top Artists of 2024 Global Playlist", fontsize=14)
 
 plt.savefig("./Outputs/spotify_artists_colab_graph.png")
 
@@ -74,7 +74,7 @@ combined_dict = {}
 for key in collaboration_counts:
     combined_dict[key] = {
         "Degree_Centrality": degree_centrality.get(key, 0),
-        "Number_of_Track_Collaborations": collaboration_counts.get(key, 0)
+        # "Number_of_Track_Collaborations": collaboration_counts.get(key, 0)
     }
 
 # Convert to DataFrame
