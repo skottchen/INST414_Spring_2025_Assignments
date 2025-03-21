@@ -1,3 +1,4 @@
+import csv
 import requests
 import time
 import networkx as nx
@@ -7,10 +8,28 @@ from matplotlib import cm
 # Wikipedia API base URL
 WIKI_API_URL = "https://en.wikipedia.org/w/api.php"
 
-cryptography_articles = ["Cryptography",
-                         "Encryption", "Public-key_cryptography"]
-privacy_law_articles = ["Privacy_law", "Data_privacy",
-                        "General_Data_Protection_Regulation"]
+def search_articles(query, max_results):
+    """
+    Search Wikipedia for articles related to a specific query and return the top article titles.
+    """
+    params = {
+        "action": "query",
+        "list": "search",
+        "srsearch": query,
+        "srlimit": max_results,
+        "format": "json"
+    }
+
+    response = requests.get(WIKI_API_URL, params=params)
+    data = response.json()
+
+    articles = [result['title'] for result in data['query']['search']]
+    return articles
+
+
+# Wikipedia API base URL
+WIKI_API_URL = "https://en.wikipedia.org/w/api.php"
+
 
 def get_links(article_title):
     """
@@ -27,15 +46,12 @@ def get_links(article_title):
     response = requests.get(WIKI_API_URL, params=params)
     data = response.json()
 
-    # Extract article links
     links = []
     pages = data.get('query', {}).get('pages', {})
-    for page_id, page_info in pages.items():
+    for page_info in pages.values():
         if 'links' in page_info:
             for link in page_info['links']:
                 link_title = link['title']
-
-                # Clean the data: exclude disambiguation, admin, and non-article links
                 if is_valid_article(link_title):
                     links.append(link_title)
 
@@ -46,44 +62,56 @@ def is_valid_article(link_title):
     """
     Check if a link is valid (not a disambiguation, list, or non-article link).
     """
-    # Exclude disambiguation, list, or special administrative pages
+    
     invalid_keywords = [
         'disambiguation', 'List of', 'User:', 'Talk:', 'Special:', 'File:',
-        'Template:', 'Wikipedia:', 'Help:', 'Portal:', 'Category:'
+        'Template:', 'Wikipedia:', 'Help:', 'Portal:', 'Category:', 'ISBN', 'Doi', 'film',
+        'term', 'Call of Duty', 'Kids','LCCN', 'ISSN'
     ]
-
-    # Ensure the link doesn't contain any invalid keywords
     return not any(keyword in link_title for keyword in invalid_keywords)
+
+
 
 def build_network(seed_articles):
     """
-    Build a network graph from seed articles and their outgoing links.
+    Build a network graph from seed articles and their outgoing links
     """
+    exclusion_keywords = ['World War II', 'Cold War', 'Tanks', 'Battle', 'Causes', 'Second']
     G = nx.Graph()
 
     for article in seed_articles:
+        if not is_valid_article(article) or any(article.lower().startswith(keyword.lower()) for keyword in exclusion_keywords):
+            continue  # Skip invalid or excluded articles
+
         links = get_links(article)
         for linked_article in links:
+            if not is_valid_article(linked_article) or any(linked_article.lower().startswith(keyword.lower()) for keyword in exclusion_keywords):
+                continue  # Skip invalid or excluded links
+
             G.add_edge(article, linked_article)
+
         time.sleep(0.5)  # To avoid hitting the API rate limit
 
     return G
 
-# Combine cryptography and privacy law articles
-all_seed_articles = cryptography_articles + privacy_law_articles
+# Search for the top 10 articles related to WW2 and the Cold War
+ww2_articles = search_articles("World War II", max_results=10)
+cold_war_articles = search_articles("Cold War", max_results=10)
 
+# Combine articles
+all_seed_articles = ww2_articles + cold_war_articles
 # Build the article network
 article_network = build_network(all_seed_articles)
 
 # Betweenness centrality to find bridging articles
-centrality = nx.betweenness_centrality(article_network)
+betweenness_centrality = nx.betweenness_centrality(article_network)
 
-# Sort articles by centrality
-sorted_centrality = sorted(
-    centrality.items(), key=lambda x: x[1], reverse=True)
+# Sort articles by betweeness centrality
+sorted_betweenness_centrality = sorted(
+    betweenness_centrality.items(), key=lambda x: x[1], reverse=True)
 
-# Select the top 50 most central nodes for clearer visualization
-top_central_nodes = [node for node, _ in sorted_centrality[:50]]
+# Select the top 20 most central nodes for clearer visualization
+top_central_nodes = [node for node, _ in sorted_betweenness_centrality[:20]]
 filtered_network = article_network.subgraph(top_central_nodes)
 
 ### Enhanced Visualization ###
@@ -94,13 +122,13 @@ plt.figure(figsize=(12, 12))
 pos = nx.spring_layout(filtered_network, k=0.25, iterations=100)
 
 # Get node sizes based on betweenness centrality (scaled up for better visualization)
-node_sizes = [centrality[node] *
-              3000 if node in centrality else 100 for node in filtered_network.nodes()]
+node_sizes = [betweenness_centrality[node] *
+              3000 if node in betweenness_centrality else 100 for node in filtered_network.nodes()]
 
 # Apply a color map to nodes based on centrality
 cmap = cm.viridis
-node_colors = [centrality[node]
-               if node in centrality else 0 for node in filtered_network.nodes()]
+node_colors = [betweenness_centrality[node]
+               if node in betweenness_centrality else 0 for node in filtered_network.nodes()]
 
 # Draw the nodes with size and color gradients based on centrality
 nx.draw_networkx_nodes(filtered_network, pos, node_color=node_colors,
@@ -121,16 +149,20 @@ def adjust_text_position(pos, offset=(0.02, 0.02)):
 adjusted_pos = adjust_text_position(pos)
 
 # Only display labels for the most central nodes with a background for better visibility
-important_nodes = {node: node for node, _ in sorted_centrality[:20]}
+important_nodes = {node: node for node, _ in sorted_betweenness_centrality[:20]}
 nx.draw_networkx_labels(filtered_network, adjusted_pos, labels=important_nodes,
                         font_size=10, font_color='yellow', font_weight='bold',
                         # Add background color
                         bbox=dict(facecolor='black', edgecolor='none', alpha=0.7))
 
-# Print the betweenness centrality values for the most central nodes (top 20)
-print("\nBetweenness Centrality for Top 20 Most Central Nodes:")
-for node, centrality_score in sorted_centrality[:20]:
-    print(f"Node: {node}, Betweenness Centrality: {centrality_score}")
+with open("betweenness_centrality.csv", "w", newline='') as file:
+    writer = csv.writer(file)
+    # Write header
+    writer.writerow(["Node", "Betweenness_Centrality_Score"])
+
+    # Write the top 20 nodes and their degree and betweenness centrality scores
+    for node, b_centrality_score in sorted_betweenness_centrality[:20]:
+        writer.writerow([node, b_centrality_score])
 
 # Add a color bar to show node centrality values
 sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(
@@ -139,7 +171,7 @@ sm.set_array([])
 cbar = plt.colorbar(sm, ax=plt.gca(), label='Betweenness Centrality')
 
 # Add a title to the graph
-plt.title('Key Articles in Cryptography and Privacy Law: A Wikipedia Network Analysis', size=15)
+plt.title('Key Wikipedia Articles that Connect Topics Related to WW2 and the Cold War', size=15)
 # Display the graph
 plt.axis('off')  # Turn off the axis for better visualization
 plt.savefig("graph.png")
