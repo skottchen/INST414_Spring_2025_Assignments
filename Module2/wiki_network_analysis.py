@@ -142,4 +142,4 @@ cbar = plt.colorbar(sm, ax=plt.gca(), label='Betweenness Centrality')
 plt.title('Key Articles in Cryptography and Privacy Law: A Wikipedia Network Analysis', size=15)
 # Display the graph
 plt.axis('off')  # Turn off the axis for better visualization
-plt.savefig("analysis_result.png")
+plt.savefig("graph.png")
