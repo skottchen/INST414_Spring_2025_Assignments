@@ -76,7 +76,7 @@ def build_network(seed_articles):
     """
     Build a network graph from seed articles and their outgoing links
     """
-    exclusion_keywords = ['World War II', 'Cold War', 'Tanks', 'Battle', 'Causes', 'Second']
+    exclusion_keywords = ['Tanks', 'Battle', 'Second']
     G = nx.Graph()
 
     for article in seed_articles:
@@ -84,6 +84,7 @@ def build_network(seed_articles):
             continue  # Skip invalid or excluded articles
 
         links = get_links(article)
+     
         for linked_article in links:
             if not is_valid_article(linked_article) or any(linked_article.lower().startswith(keyword.lower()) for keyword in exclusion_keywords):
                 continue  # Skip invalid or excluded links
@@ -100,6 +101,7 @@ cold_war_articles = search_articles("Cold War", max_results=10)
 
 # Combine articles
 all_seed_articles = ww2_articles + cold_war_articles
+print(all_seed_articles)
 # Build the article network
 article_network = build_network(all_seed_articles)
 
