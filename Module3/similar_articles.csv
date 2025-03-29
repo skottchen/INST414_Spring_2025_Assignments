@@ -1,0 +1,51 @@
+Query Article,Similar Article,Cosine Similarity
+Climate change,Effects of climate change,0.34989465798727853
+Climate change,Climate change mitigation,0.33378302078637073
+Climate change,Climate change in the United States,0.24008258781285288
+Climate change,Paris Agreement,0.23321161447111038
+Climate change,Scientific consensus on climate change,0.16230796313079338
+Climate change,Climate,0.1586307003926737
+Climate change,Climate change adaptation,0.15382077532280777
+Climate change,United Nations Framework Convention on Climate Change,0.15264423203791902
+Climate change,Climate change denial,0.1407790436246825
+Climate change,2025 in climate change,0.12732835881890656
+Climate change denial,Scientific consensus on climate change,0.5118167383051703
+Climate change denial,Climate change feedbacks,0.426909830843405
+Climate change denial,Climate change adaptation,0.3403108372008307
+Climate change denial,Effects of climate change,0.285246922487569
+Climate change denial,Climate change in the United States,0.19513234082497305
+Climate change denial,Climate change,0.1407790436246825
+Climate change denial,2025 in climate change,0.10443930320987087
+Climate change denial,Climate,0.09241919484387975
+Climate change denial,Climate change mitigation,0.08840627116526087
+Climate change denial,Paris Agreement,0.08828734963970498
+Climate change mitigation,Climate change,0.33378302078637073
+Climate change mitigation,Climate change feedbacks,0.1931321869020596
+Climate change mitigation,Effects of climate change,0.14079751309226385
+Climate change mitigation,Climate change in the United States,0.1339553443253634
+Climate change mitigation,Scientific consensus on climate change,0.10965139994754056
+Climate change mitigation,Paris Agreement,0.10382126278831043
+Climate change mitigation,United Nations Framework Convention on Climate Change,0.09539830906197759
+Climate change mitigation,Climate,0.09050880994513191
+Climate change mitigation,Climate change denial,0.08840627116526087
+Climate change mitigation,Climate change adaptation,0.0868881276918998
+Paris Agreement,United Nations Framework Convention on Climate Change,0.42060671963292373
+Paris Agreement,Climate change in the United States,0.24884983120782322
+Paris Agreement,Climate change,0.23321161447111038
+Paris Agreement,United Nations Climate Change Conference,0.210743344897694
+Paris Agreement,Climate change adaptation,0.14308695494546714
+Paris Agreement,Climate,0.11628954989216811
+Paris Agreement,Intergovernmental Panel on Climate Change,0.11303233611209249
+Paris Agreement,Climate change mitigation,0.10382126278831043
+Paris Agreement,Effects of climate change,0.1012419862152081
+Paris Agreement,Climate change denial,0.08828734963970498
+United Nations Framework Convention on Climate Change,Paris Agreement,0.42060671963292373
+United Nations Framework Convention on Climate Change,United Nations Climate Change Conference,0.3337768824722671
+United Nations Framework Convention on Climate Change,Climate change in the United States,0.17138859814557722
+United Nations Framework Convention on Climate Change,Climate change,0.15264423203791902
+United Nations Framework Convention on Climate Change,Climate change adaptation,0.1383439730717673
+United Nations Framework Convention on Climate Change,Intergovernmental Panel on Climate Change,0.12331470306202243
+United Nations Framework Convention on Climate Change,Effects of climate change,0.09940748585948588
+United Nations Framework Convention on Climate Change,Scientific consensus on climate change,0.0979017610750577
+United Nations Framework Convention on Climate Change,Climate change mitigation,0.09539830906197759
+United Nations Framework Convention on Climate Change,2025 in climate change,0.0911055349298985
