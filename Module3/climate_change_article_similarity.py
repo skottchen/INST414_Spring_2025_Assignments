@@ -15,7 +15,7 @@ def is_valid_article(link_title):
     invalid_keywords = [
         'disambiguation', 'List of', 'User:', 'Talk:', 'Special:', 'File:',
         'Template:', 'Wikipedia:', 'Help:', 'Portal:', 'Category:', 'ISBN',
-        'Doi', 'LCCN', 'ISSN', 'Glossary', 
+        'Doi', 'LCCN', 'ISSN', 'Glossary',
     ]
     return not any(keyword in link_title for keyword in invalid_keywords)
 
@@ -124,7 +124,7 @@ def write_results_to_csv(similar_articles, filename="similar_articles.csv"):
 all_articles = search_articles("Climate change", max_results=20)
 
 # Use the first 3 as the main query articles
-query_articles = all_articles[:5]
+query_articles = all_articles[:3]
 
 # Find 10 most similar pages for each query article
 similar_articles = find_similar_pages(
