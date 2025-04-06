@@ -46,7 +46,7 @@ def search_articles(query, max_results=20):
 
 
 def get_article_content(article_title):
-   """
+    """
     Fetch the introductory extract of a Wikipedia article.
     """
     params = {
