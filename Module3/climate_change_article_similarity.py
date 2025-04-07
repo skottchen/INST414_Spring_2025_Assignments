@@ -47,7 +47,7 @@ def search_articles(query, max_results=20):
 
 def get_article_content(article_title):
     """
-    Fetch the content of a Wikipedia article.
+    Fetch the introductory extract of a Wikipedia article.
     """
     params = {
         "action": "query",
@@ -63,7 +63,6 @@ def get_article_content(article_title):
     pages = data.get('query', {}).get('pages', {})
     page_id = list(pages.keys())[0]
     article_content = pages[page_id].get('extract', '')
-
     return article_content
 
 
@@ -73,7 +72,7 @@ def calculate_similarity(articles_content):
     """
     vectorizer = TfidfVectorizer(stop_words='english')
     tfidf_matrix = vectorizer.fit_transform(articles_content)
-
+    
     similarity_matrix = cosine_similarity(tfidf_matrix)
     return similarity_matrix
 
@@ -87,7 +86,7 @@ def find_similar_pages(query_articles, all_articles, num_similar_pages=10):
 
     # Compute similarity matrix
     similarity_matrix = calculate_similarity(all_articles_content)
-
+    
     # Find the most similar pages for each query article
     similar_articles = {}
     for i, query_article in enumerate(query_articles):
@@ -101,6 +100,7 @@ def find_similar_pages(query_articles, all_articles, num_similar_pages=10):
             similar_articles[query_article] = [
                 (all_articles[idx], similarity_scores[idx]) for idx in similar_indices
             ]
+
 
     return similar_articles
 
@@ -122,7 +122,6 @@ def write_results_to_csv(similar_articles, filename="similar_articles.csv"):
 
 # Search for the top 20 articles related to climate change
 all_articles = search_articles("Climate change", max_results=20)
-
 # Use the first 3 as the main query articles
 query_articles = all_articles[:3]
 

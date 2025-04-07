@@ -36,13 +36,13 @@ def plot_similar_articles_frequency(csv_filename):
 
     # Plot the bar chart
     plt.figure(figsize=(14, 8))  # Increase figure size for better readability
-    bars = plt.barh(articles, counts, color='lightgreen')
+    plt.barh(articles, counts, color='lightgreen')
 
     # Invert y-axis to have the highest count at the top
     plt.gca().invert_yaxis()
 
     # Add labels and title
-    plt.xlabel('Frequency Count', fontsize=12)
+    plt.xlabel('Frequency Count', fontsize=12) # number of times that each article shows up across all query articles
     plt.ylabel('Similar Articles', fontsize=12)
     plt.title('Frequency of Similar Articles', fontsize=14)
 
