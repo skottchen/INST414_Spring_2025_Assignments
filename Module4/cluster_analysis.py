@@ -178,8 +178,8 @@ adjust_text(
 )
 
 plt.title("Agglomerative Clustering of Wikipedia Articles on U.S. Presidential Elections (1944 - 2024)")
-plt.xlabel("PCA Component 1 (Historical → Modern Framing)")
-plt.ylabel("PCA Component 2 (Policy Focus → Conflict Focus)")
+plt.xlabel("Principal Component 1 (Historical → Modern Framing)")
+plt.ylabel("Principal Component 2 (Policy Focus → Conflict Focus)")
 plt.grid(True)
 plt.tight_layout()
 plt.savefig("pres_election_clusters.png", dpi=300)
