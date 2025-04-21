@@ -177,7 +177,7 @@ adjust_text(
     arrowprops=dict(arrowstyle="-", color='gray', lw=0.5)
 )
 
-plt.title("Agglomerative Clustering of Wikipedia Articles on U.S. Presidential Elections (1944 - Present)")
+plt.title("Agglomerative Clustering of Wikipedia Articles on U.S. Presidential Elections (1944 - 2024)")
 plt.xlabel("PCA Component 1 (Historical → Modern Framing)")
 plt.ylabel("PCA Component 2 (Policy Focus → Conflict Focus)")
 plt.grid(True)

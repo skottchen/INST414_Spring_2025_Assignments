@@ -4,6 +4,7 @@ import time
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import json
 
 # Wikipedia API base URL
 WIKI_API_URL = "https://en.wikipedia.org/w/api.php"
@@ -22,7 +23,10 @@ def search_articles(query, max_results):
 
     response = requests.get(WIKI_API_URL, params=params)
     data = response.json()
-
+    # for key, value in data.items():
+    #     print("Response: ", value)
+    # print("---------------------")
+    # key field: 'title'
     articles = [result['title'] for result in data['query']['search']]
     return articles
 
@@ -84,7 +88,8 @@ def build_network(seed_articles):
             continue  # Skip invalid or excluded articles
 
         links = get_links(article)
-     
+        print(links)
+        print("---------------")
         for linked_article in links:
             if not is_valid_article(linked_article) or any(linked_article.lower().startswith(keyword.lower()) for keyword in exclusion_keywords):
                 continue  # Skip invalid or excluded links
@@ -101,7 +106,6 @@ cold_war_articles = search_articles("Cold War", max_results=10)
 
 # Combine articles
 all_seed_articles = ww2_articles + cold_war_articles
-print(all_seed_articles)
 # Build the article network
 article_network = build_network(all_seed_articles)
 
