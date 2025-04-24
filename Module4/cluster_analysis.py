@@ -1,3 +1,4 @@
+from matplotlib import colors as mcolors
 import os
 import time
 import json
@@ -148,18 +149,22 @@ print("Saved: top_terms_per_cluster.csv")
 # === STEP 7: PCA visualization ===
 reduced = PCA(n_components=2).fit_transform(embeddings)
 plt.figure(figsize=(12, 7))
-# Create a shuffled list of distinct colors
-base_colors = plt.cm.tab20.colors  # 20 distinct colors
-shuffled_colors = list(base_colors)
-random.shuffle(shuffled_colors)
 
-# Assign each cluster a color
-unique_labels = np.unique(labels)
-color_map = {label: shuffled_colors[i % len(
-    shuffled_colors)] for i, label in enumerate(unique_labels)}
+# Use bright, distinct Tableau colors
+distinct_colors = list(mcolors.TABLEAU_COLORS.values())  # 10 bright colors
+
+# If more clusters than colors, raise an error or define more distinct colors manually
+unique_labels = sorted(np.unique(labels))
+if len(unique_labels) > len(distinct_colors):
+    raise ValueError(f"Only {len(distinct_colors)} distinct colors available, "
+                     f"but you have {len(unique_labels)} clusters. Please add more colors.")
+
+# Assign consistent, distinct colors
+color_map = {label: distinct_colors[i]
+             for i, label in enumerate(unique_labels)}
 point_colors = [color_map[label] for label in labels]
 
-# Plot with randomized colors
+# Plot with consistent, high-contrast colors
 scatter = plt.scatter(reduced[:, 0], reduced[:, 1],
                       c=point_colors, s=100, edgecolors='k')
 
