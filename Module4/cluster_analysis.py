@@ -6,7 +6,6 @@ import requests
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import random
 from sklearn.cluster import AgglomerativeClustering, KMeans
 from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -15,7 +14,6 @@ from sentence_transformers import SentenceTransformer
 from adjustText import adjust_text
 from matplotlib.colors import ListedColormap
 
-# === STEP 0: Setup ===
 titles = [
     "2024 United States presidential election",
     "2020 United States presidential election",
@@ -43,7 +41,7 @@ titles = [
 WIKI_API_URL = "https://en.wikipedia.org/w/api.php"
 os.makedirs("cache", exist_ok=True)
 
-# === STEP 1: Fetch Wikipedia article content (cached) ===
+
 def fetch_wikipedia_intro(title):
     """Fetch and cache the lead intro of a Wikipedia article."""
     safe_title = title.replace(" ", "_").replace("/", "_")
@@ -80,15 +78,16 @@ contents = []
 for title in titles:
     print(f"Fetching: {title}")
     summary = fetch_wikipedia_intro(title)
+    # print(summary)
+    # print("--------------")
     contents.append(summary)
     time.sleep(0.5)
 
-# === STEP 2: Generate Sentence-BERT embeddings ===
 print("Generating Sentence-BERT embeddings...")
 model = SentenceTransformer('all-MiniLM-L6-v2')
 embeddings = model.encode(contents, show_progress_bar=True)
 
-# === STEP 3: Elbow method (using embeddings) ===
+
 def elbow_method(vectors, max_k=10):
     wcss = []
     for k in range(1, max_k + 1):
@@ -112,21 +111,12 @@ plt.tight_layout()
 plt.savefig("elbow_method_graph.png", dpi=300)
 print(f"Optimal number of clusters: {optimal_k}")
 
-# === STEP 4: Agglomerative Clustering with cosine distance ===
 distance_matrix = cosine_distances(embeddings)
 cluster_model = AgglomerativeClustering(
     n_clusters=optimal_k, metric='precomputed', linkage='average')
 labels = cluster_model.fit_predict(distance_matrix)
 
-# === STEP 5: Save cluster labels ===
-df = pd.DataFrame({
-    "Article Title": titles,
-    "Cluster Label": labels
-})
-df.to_csv("clustered_wikipedia_articles.csv", index=False)
-print("Saved: clustered_wikipedia_articles.csv")
 
-# === STEP 6: Top TF-IDF terms per cluster ===
 def top_terms_per_cluster(texts, labels, top_n=5):
     vectorizer = TfidfVectorizer(stop_words='english')
     tfidf_matrix = vectorizer.fit_transform(texts)
@@ -146,11 +136,9 @@ terms_df = top_terms_per_cluster(contents, labels)
 terms_df.to_csv("top_terms_per_cluster.csv", index=False)
 print("Saved: top_terms_per_cluster.csv")
 
-# === STEP 7: PCA visualization ===
 reduced = PCA(n_components=2).fit_transform(embeddings)
 plt.figure(figsize=(12, 7))
 
-# Use bright, distinct Tableau colors
 distinct_colors = list(mcolors.TABLEAU_COLORS.values())  # 10 bright colors
 
 # If more clusters than colors, raise an error or define more distinct colors manually
@@ -181,6 +169,28 @@ adjust_text(
     only_move={'points': 'y', 'texts': 'xy'},
     arrowprops=dict(arrowstyle="-", color='gray', lw=0.5)
 )
+
+# Save cluster labels ===
+# Reverse map from hex to color name and strip 'tab:' prefix
+hex_to_name = {v: k.replace("tab:", "")
+               for k, v in mcolors.TABLEAU_COLORS.items()}
+
+# Get color hex for each article based on cluster label
+cluster_colors_hex = [color_map[label] for label in labels]
+
+# Map to readable color names, fallback to hex if unknown
+cluster_color_names = [hex_to_name.get(
+    hex_code, hex_code) for hex_code in cluster_colors_hex]
+
+# Create DataFrame with clean color names
+df = pd.DataFrame({
+    "Article Title": titles,
+    "Cluster Color": cluster_color_names,
+    "Cluster Label": labels
+}).sort_values(by="Cluster Label")
+
+df.to_csv("clustered_wikipedia_articles.csv", index=False)
+print("Saved: clustered_wikipedia_articles.csv")
 
 plt.title("Agglomerative Clustering of Wikipedia Articles on U.S. Presidential Elections (1944 - 2024)")
 plt.xlabel("Principal Component 1 (Historical → Modern Framing)")
